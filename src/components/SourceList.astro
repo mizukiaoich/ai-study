@@ -1,0 +1,27 @@
+---
+import { SOURCE_TYPES } from '../data/categories';
+interface Props { sources: { type: keyof typeof SOURCE_TYPES; title: string; url?: string }[] }
+const { sources } = Astro.props;
+---
+{sources.length > 0 && (
+  <section class="card aside-box sources">
+    <h2>情報の出どころ</h2>
+    <ul>
+      {sources.map((s) => (
+        <li class={`src-${s.type}`}>
+          <span class="src-type">{SOURCE_TYPES[s.type].icon} {SOURCE_TYPES[s.type].label}</span>
+          {s.url ? <a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a> : <span>{s.title}</span>}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+<style>
+  .sources ul { list-style: none; padding: 0 !important; display: flex; flex-direction: column; gap: 8px; }
+  .sources li { padding-left: 10px; border-left: 4px solid #cbd5e1; line-height: 1.5; }
+  .src-type { display: block; font-size: 0.72rem; font-weight: 700; color: var(--muted); }
+  .src-official { border-color: #2563eb !important; }
+  .src-tried { border-color: #16a34a !important; }
+  .src-discord { border-color: #ea580c !important; }
+  .src-ai { border-color: #7c3aed !important; }
+</style>

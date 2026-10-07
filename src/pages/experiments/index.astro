@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getExperiments, getTools, formatDate } from '../../lib/content';
+import { url } from '../../lib/url';
+
+const experiments = await getExperiments();
+const tools = await getTools();
+const name = (id: string) => tools.find((t) => t.id === id)?.data.name ?? id;
+const STATUS = { planned: ['予定', 'badge-gray'], doing: ['実験中', 'badge-orange'], done: ['完了', 'badge-green'] } as const;
+---
+<BaseLayout title="AI実験室" description="「実際にAIにやらせてみた」記録です。">
+  <PageHero title="AI実験室" eyebrow="07 🧪" description="「実際にAIにやらせてみた」記録です。目的・プロンプト・結果・良かった点・失敗した点まで、そのまま残しています。" />
+  <section class="section container">
+    {experiments.length ? (
+      <div class="grid exp-grid">
+        {experiments.map((e) => (
+          <a class="card exp" href={url(`/experiments/${e.id}/`)}>
+            <div class="exp-top">
+              <span class="exp-id">実験<strong>{e.data.id}</strong></span>
+              <span class={`badge ${STATUS[e.data.status][1]}`}>{STATUS[e.data.status][0]}</span>
+            </div>
+            <h2>{e.data.title}</h2>
+            <time datetime={e.data.date.toISOString()}>{formatDate(e.data.date)}</time>
+            {e.data.summary && <p>{e.data.summary}</p>}
+            {e.data.ais.length > 0 && <ul class="tag-list">{e.data.ais.map((a) => <li class="tag">{name(a)}</li>)}</ul>}
+            {e.data.conclusion && <p class="conclusion"><strong>結論：</strong>{e.data.conclusion}</p>}
+          </a>
+        ))}
+      </div>
+    ) : <p class="empty">まだ実験がありません。</p>}
+  </section>
+</BaseLayout>
+<style>
+  .exp-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+  .exp { border-top: 4px solid var(--pink); display: flex !important; flex-direction: column; gap: 6px; }
+  .exp-top { display: flex; justify-content: space-between; align-items: center; }
+  .exp-id { font-family: var(--font-round); color: var(--pink); font-weight: 700; font-size: 0.85rem; }
+  .exp-id strong { font-size: 1.4rem; margin-left: 2px; }
+  h2 { margin: 0; font-size: 1.08rem; }
+  time { font-size: 0.8rem; color: var(--muted); }
+  p { margin: 0; font-size: 0.88rem; color: #475569; }
+  .conclusion { background: #fdf2f8; border-radius: 8px; padding: 8px 10px; margin-top: 4px; }
+</style>

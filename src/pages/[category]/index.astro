@@ -1,0 +1,64 @@
+---
+// 01〜05 のカテゴリーページ（/know/ /use/ /compare/ /work/ /make/）
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { CATEGORIES, CATEGORY_IDS, type CategoryId } from '../../data/categories';
+import { getArticles, getExperiments, toLinkItem } from '../../lib/content';
+import { url } from '../../lib/url';
+
+export function getStaticPaths() {
+  return CATEGORY_IDS.map((category) => ({ params: { category } }));
+}
+const id = Astro.params.category as CategoryId;
+const cat = CATEGORIES[id];
+const articles = await getArticles(id);
+const experiments = await getExperiments(id);
+const topics = (cat.topics ?? []).map((topic) => ({ topic, items: articles.filter((a) => a.data.topic === topic) }));
+const done = topics.filter((t) => t.items.length).length;
+---
+<BaseLayout title={cat.title} description={cat.description}>
+  <PageHero title={cat.title} eyebrow={`${cat.num} ${cat.icon}`} description={cat.description} />
+
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">このカテゴリーで調べること</h2>
+      <span class="badge badge-gray">{done} / {topics.length} テーマ記録済み</span>
+    </div>
+    <p class="section-lead">「準備中」のテーマは、これからDiscordで調べる予定のものです。</p>
+    <ul class="topics">
+      {topics.map((t) => (
+        <li class:list={['topic', { ready: t.items.length }]}>
+          {t.items.length ? (
+            <a href={url(`/articles/${t.items[0].id}/`)}><span>✅</span>{t.topic}{t.items.length > 1 && <small>（{t.items.length}件）</small>}</a>
+          ) : (
+            <span class="todo"><span>⏳</span>{t.topic}<small>準備中</small></span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section container">
+    <div class="section-head"><h2 class="section-title">記事</h2></div>
+    {articles.length ? (
+      <div class="grid">{articles.map((a) => <ContentCard item={toLinkItem(a)} image={a.data.image} />)}</div>
+    ) : (
+      <p class="empty">まだ記事がありません。最初の記事をみんなで作りましょう！</p>
+    )}
+  </section>
+
+  {experiments.length > 0 && (
+    <section class="section container">
+      <div class="section-head"><h2 class="section-title">関連するAI実験</h2></div>
+      <div class="grid">{experiments.map((e) => <ContentCard item={toLinkItem(e)} image={e.data.image} />)}</div>
+    </section>
+  )}
+</BaseLayout>
+<style>
+  .topics { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
+  .topic > * { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 12px; background: #fff; border: 1px solid var(--border); font-weight: 500; height: 100%; }
+  .topic.ready > a { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+  .todo { color: var(--muted); border-style: dashed !important; }
+  .topic small { margin-left: auto; font-size: 0.72rem; color: var(--muted); }
+</style>

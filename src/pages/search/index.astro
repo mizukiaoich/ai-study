@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { KIND_LABEL } from '../../lib/content';
+import { url } from '../../lib/url';
+---
+<BaseLayout title="サイト内検索" description="学習ログ・記事・AIツール・実験・用語をまとめて検索できます。">
+  <PageHero title="サイト内検索" eyebrow="SEARCH 🔍" description="学習ログ・記事・AIツール・実験・用語をまとめて検索できます。" />
+  <section class="section container" id="search-root" data-index={url('/search-index.json')} data-base={url('/')}>
+    <form class="search-form" role="search" onsubmit="return false">
+      <label class="visually-hidden" for="q">キーワード</label>
+      <input id="q" name="q" type="search" placeholder="例：ハルシネーション、ChatGPT、Day 1" autocomplete="off" />
+    </form>
+    <div class="filters" role="group" aria-label="種類でしぼりこむ">
+      <button type="button" data-kind="" aria-pressed="true">すべて</button>
+      {Object.entries(KIND_LABEL).map(([k, v]) => <button type="button" data-kind={k} aria-pressed="false">{v}</button>)}
+    </div>
+    <p id="status" class="status" aria-live="polite">キーワードを入力してください。</p>
+    <ul id="results" class="results"></ul>
+  </section>
+</BaseLayout>
+
+<script>
+  type Item = { kind: string; kindLabel: string; href: string; title: string; category: string; date: string; summary: string; keywords: string; text: string };
+  const root = document.getElementById('search-root')!;
+  const input = document.getElementById('q') as HTMLInputElement;
+  const status = document.getElementById('status')!;
+  const results = document.getElementById('results')!;
+  const base = (root.dataset.base ?? '/').replace(/\/$/, '');
+  let items: Item[] = [];
+  let kind = '';
+
+  const norm = (s: string) => s.normalize('NFKC').toLowerCase().replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  function snippet(text: string, word: string) {
+    const i = norm(text).indexOf(word);
+    if (i < 0) return '';
+    const start = Math.max(0, i - 40);
+    return (start > 0 ? '…' : '') + text.slice(start, i + 80) + '…';
+  }
+
+  function run() {
+    const q = input.value.trim();
+    const words = norm(q).split(/\s+/).filter(Boolean);
+    const url = new URL(location.href);
+    q ? url.searchParams.set('q', q) : url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+    if (!words.length) { results.innerHTML = ''; status.textContent = 'キーワードを入力してください。'; return; }
+
+    const scored = items
+      .filter((it) => !kind || it.kind === kind)
+      .map((it) => {
+        const t = norm(it.title), m = norm(`${it.summary} ${it.keywords} ${it.category}`), b = norm(it.text);
+        let score = 0;
+        for (const w of words) {
+          const s = (t.includes(w) ? 10 : 0) + (m.includes(w) ? 4 : 0) + (b.includes(w) ? 1 : 0);
+          if (!s) return { it, score: 0 };
+          score += s;
+        }
+        return { it, score };
+      })
+      .filter((r) => r.score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    status.textContent = scored.length ? `${scored.length} 件見つかりました。` : '見つかりませんでした。別の言葉でも試してみてください。';
+    results.innerHTML = scored.map(({ it }) => {
+      const sn = !norm(it.summary).includes(words[0]) ? snippet(it.text, words[0]) : '';
+      return `<li><a class="card" href="${base}${it.href}">
+        <div class="meta"><span class="badge">${esc(it.kindLabel)}</span>${it.category ? `<span>${esc(it.category)}</span>` : ''}${it.date ? `<time>${esc(it.date)}</time>` : ''}</div>
+        <h2>${esc(it.title)}</h2>
+        ${it.summary ? `<p>${esc(it.summary)}</p>` : ''}
+        ${sn ? `<p class="snip">${esc(sn)}</p>` : ''}
+      </a></li>`;
+    }).join('');
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.filters button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      kind = btn.dataset.kind ?? '';
+      document.querySelectorAll('.filters button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      run();
+    });
+  });
+  input.addEventListener('input', run);
+
+  input.value = new URLSearchParams(location.search).get('q') ?? '';
+  input.focus();
+  fetch(root.dataset.index!)
+    .then((r) => r.json())
+    .then((data: Item[]) => { items = data; run(); })
+    .catch(() => { status.textContent = '検索データを読み込めませんでした。'; });
+</script>
+
+<style>
+  .search-form input { width: 100%; padding: 14px 18px; font-size: 1.05rem; border-radius: 14px; border: 2px solid #bfdbfe; font-family: inherit; background: #fff; }
+  .search-form input:focus { outline: none; border-color: var(--blue); }
+  .filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+  .filters button { padding: 6px 14px; border-radius: 999px; border: 1px solid #cbd5e1; background: #fff; font-family: inherit; font-size: 0.85rem; cursor: pointer; color: var(--text); }
+  .filters button[aria-pressed='true'] { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .status { color: var(--muted); font-size: 0.9rem; }
+  .results { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .results :global(.meta) { display: flex; gap: 10px; align-items: center; font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; }
+  .results :global(h2) { margin: 6px 0 2px; font-size: 1.05rem; }
+  .results :global(p) { margin: 0; font-size: 0.88rem; color: #475569; }
+  .results :global(.snip) { margin-top: 4px; font-size: 0.82rem; color: var(--muted); }
+</style>

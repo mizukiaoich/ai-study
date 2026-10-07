@@ -1,0 +1,15 @@
+---
+interface Props { score: number; votes?: number }
+const { score, votes } = Astro.props;
+const pct = Math.max(0, Math.min(100, (score / 5) * 100));
+---
+<span class="stars" aria-label={`5点中${score}点`}>
+  <span class="stars-bg" aria-hidden="true">★★★★★<span class="stars-fg" style={`width:${pct}%`}>★★★★★</span></span>
+  <strong>{score.toFixed(1)}</strong><small> / 5{votes !== undefined && `（${votes}人）`}</small>
+</span>
+<style>
+  .stars { display: inline-flex; align-items: center; gap: 6px; }
+  .stars-bg { position: relative; color: #e2e8f0; letter-spacing: 2px; font-size: 1.05rem; line-height: 1; }
+  .stars-fg { position: absolute; left: 0; top: 0; overflow: hidden; white-space: nowrap; color: #f59e0b; }
+  small { color: var(--muted); }
+</style>

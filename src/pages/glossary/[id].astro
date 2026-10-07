@@ -1,0 +1,32 @@
+---
+import { render } from 'astro:content';
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import { getGlossary, resolveRelated, findBacklinks } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const terms = await getGlossary();
+  return terms.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const related = await resolveRelated(d.related, entry.id);
+const backlinks = await findBacklinks('glossary', entry.id);
+---
+<DetailLayout
+  title={d.english ? `${d.term}（${d.english}）` : d.term}
+  description={d.short}
+  eyebrow={`AI用語集 ・ ${d.reading}`}
+  crumbs={[{ title: 'AI用語集', path: '/glossary/' }]}
+  headings={headings}
+  related={related}
+  backlinks={backlinks}
+  sources={d.sources}
+>
+  <p slot="before" class="short"><span>💡 初心者向けの一言説明</span>{d.short}</p>
+  <Content />
+</DetailLayout>
+<style>
+  .short { margin: 0 0 24px; padding: 16px 18px; border-radius: 12px; background: #fefce8; border: 1px solid #fde68a; font-size: 1.05rem; font-weight: 500; }
+  .short span { display: block; font-size: 0.78rem; color: #a16207; font-weight: 700; }
+</style>

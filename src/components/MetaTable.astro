@@ -1,0 +1,18 @@
+---
+// 記事上部の「学習日・参加者」などの情報欄
+interface Props { rows: { label: string; value?: string | string[] }[] }
+const rows = Astro.props.rows.filter((r) => (Array.isArray(r.value) ? r.value.length : r.value));
+---
+{rows.length > 0 && (
+  <dl class="meta">
+    {rows.map((r) => (
+      <div><dt>{r.label}</dt><dd>{Array.isArray(r.value) ? r.value.join('、') : r.value}</dd></div>
+    ))}
+  </dl>
+)}
+<style>
+  .meta { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 10px; margin: 0 0 24px; padding: 14px 16px; background: #f8fbff; border: 1px solid #dbeafe; border-radius: 12px; }
+  .meta div { min-width: 0; }
+  dt { font-size: 0.72rem; color: var(--muted); font-weight: 700; }
+  dd { margin: 0; font-size: 0.92rem; }
+</style>

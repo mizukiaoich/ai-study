@@ -1,0 +1,36 @@
+---
+import { SITE_MENU } from '../data/categories';
+import { url } from '../lib/url';
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-about">
+        <p class="footer-logo">🎓 AI学習サイト</p>
+        <p>AIに詳しくない私たちが、Discordで一緒に調べて、試して、学んだことを記録しています。</p>
+        <p class="note">※ 掲載内容は学習の記録です。AIの回答は必ずしも正しいとは限りません。公式情報もあわせて確認してください。</p>
+      </div>
+      <nav aria-label="サイトメニュー">
+        <ul class="footer-menu">
+          {SITE_MENU.map((m) => <li><a href={url(m.path)}><span>{m.num}</span>{m.title}</a></li>)}
+          <li><a href={url('/articles/')}><span>★</span>記事一覧</a></li>
+          <li><a href={url('/search/')}><span>🔍</span>サイト内検索</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="copy">© {new Date().getFullYear()} AI学習サイト ／ みんなでつくるAI学習記録</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--navy); color: #cbd5e1; padding: 40px 0 24px; margin-top: 40px; font-size: 0.9rem; }
+  .footer-top { display: grid; gap: 28px; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .footer-top { grid-template-columns: 1fr 1.4fr; } }
+  .footer-logo { font-family: var(--font-round); font-weight: 800; color: #fff; font-size: 1.1rem; margin: 0 0 8px; }
+  .footer-about p { margin: 0 0 8px; }
+  .note { font-size: 0.8rem; color: #94a3b8; }
+  .footer-menu { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); gap: 4px 16px; }
+  .footer-menu a { color: #dbe4ff; display: flex; gap: 8px; padding: 4px 0; }
+  .footer-menu span { color: var(--cyan); font-weight: 700; min-width: 1.6em; }
+  .copy { margin: 28px 0 0; padding-top: 16px; border-top: 1px solid rgba(148, 163, 184, 0.2); font-size: 0.8rem; color: #94a3b8; text-align: center; }
+</style>

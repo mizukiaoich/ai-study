@@ -1,0 +1,34 @@
+---
+import { render } from 'astro:content';
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import MetaTable from '../../components/MetaTable.astro';
+import { getNews, getTools, formatDate, resolveRelated, findBacklinks } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const news = await getNews();
+  return news.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const tools = await getTools();
+const related = await resolveRelated([...d.related, ...d.tools.filter((t) => tools.some((x) => x.id === t)).map((t) => `tools/${t}`)], entry.id);
+const backlinks = await findBacklinks('news', entry.id);
+---
+<DetailLayout
+  title={d.title}
+  description={d.summary}
+  eyebrow="AIニュース・アップデート"
+  crumbs={[{ title: 'AIニュース', path: '/news/' }]}
+  headings={headings}
+  related={related}
+  backlinks={backlinks}
+  sources={d.sources}
+>
+  <MetaTable slot="before" rows={[
+    { label: '日付', value: formatDate(d.date) },
+    { label: '関係するAI', value: d.tools.map((t) => tools.find((x) => x.id === t)?.data.name ?? t) },
+    { label: '私たちへの影響', value: d.impact },
+  ]} />
+  <Content />
+</DetailLayout>

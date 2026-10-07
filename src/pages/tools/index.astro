@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import { getTools } from '../../lib/content';
+
+const tools = await getTools();
+---
+<BaseLayout title="AIツール図鑑" description="AIツールごとに、できること・料金・実際に使った感想をまとめています。">
+  <PageHero title="AIツール図鑑" eyebrow="06 🧰" description="AIツールごとに、できること・料金・実際に使ってみた感想をまとめています。評価はDiscordメンバーの体験にもとづくもので、公式のランキングではありません。" />
+  <section class="section container">
+    {tools.length ? <div class="grid">{tools.map((t) => <ToolCard tool={t} />)}</div> : <p class="empty">まだツールが登録されていません。</p>}
+  </section>
+</BaseLayout>

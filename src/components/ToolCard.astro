@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/url';
+import Stars from './Stars.astro';
+interface Props { tool: CollectionEntry<'tools'> }
+const { tool } = Astro.props;
+const d = tool.data;
+---
+<a class="card tool-card" href={url(`/tools/${tool.id}/`)} style={`--c:${d.color}`}>
+  <span class="tool-icon" aria-hidden="true">{d.icon}</span>
+  <div>
+    <h3>{d.name}</h3>
+    <p class="vendor">{d.vendor}</p>
+    <p class="sum">{d.summary}</p>
+    {d.rating && <Stars score={d.rating.score} votes={d.rating.votes} />}
+  </div>
+</a>
+<style>
+  .tool-card { display: flex !important; gap: 14px; align-items: flex-start; border-top: 4px solid var(--c); }
+  .tool-icon { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; font-size: 1.5rem; background: color-mix(in srgb, var(--c) 14%, white); }
+  h3 { margin: 0; font-size: 1.05rem; }
+  .vendor { margin: 0; font-size: 0.78rem; color: var(--muted); }
+  .sum { margin: 6px 0; font-size: 0.86rem; color: #475569; line-height: 1.6; }
+</style>

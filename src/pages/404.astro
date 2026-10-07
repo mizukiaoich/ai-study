@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Robot from '../components/Robot.astro';
+import { url } from '../lib/url';
+---
+<BaseLayout title="ページが見つかりません">
+  <section class="section container nf">
+    <Robot size={160} />
+    <h1>ページが見つかりませんでした</h1>
+    <p>URLが変わったか、まだ作られていないページかもしれません。</p>
+    <p><a class="btn btn-primary" href={url('/')}>トップへ戻る</a> <a class="btn btn-outline" href={url('/search/')}>検索する</a></p>
+  </section>
+</BaseLayout>
+<style>.nf { text-align: center; padding: 60px 16px; }</style>
