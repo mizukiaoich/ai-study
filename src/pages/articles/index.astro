@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { getArticles, toLinkItem } from '../../lib/content';
+import { CATEGORIES, CATEGORY_IDS } from '../../data/categories';
+import { url } from '../../lib/url';
+
+const articles = await getArticles();
+---
+<BaseLayout title="記事一覧" description="みんなで調べてまとめた記事の一覧です。">
+  <PageHero title="記事一覧" eyebrow="ARTICLES" description="みんなで調べてまとめた記事の一覧です。カテゴリーごとにも見られます。" />
+  <section class="section container">
+    <ul class="tag-list cats">
+      {CATEGORY_IDS.map((c) => <li><a class="btn btn-outline" href={url(CATEGORIES[c].path)}>{CATEGORIES[c].icon} {CATEGORIES[c].title}</a></li>)}
+    </ul>
+    {articles.length ? (
+      <div class="grid">{articles.map((a) => <ContentCard item={toLinkItem(a)} image={a.data.image} />)}</div>
+    ) : <p class="empty">まだ記事がありません。</p>}
+  </section>
+</BaseLayout>
+<style>.cats { margin-bottom: 24px; } .cats .btn { padding: 8px 16px; font-size: 0.85rem; }</style>

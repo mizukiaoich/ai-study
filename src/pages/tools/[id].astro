@@ -1,0 +1,92 @@
+---
+import { render } from 'astro:content';
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import Stars from '../../components/Stars.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { getTools, getExperiments, getLearningLogs, formatDate, resolveRelated, findBacklinks, toLinkItem } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const tools = await getTools();
+  return tools.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+// このツールを使った実験・学習ログを自動で集める（ais / tools に id を書くだけで紐づく）
+const experiments = (await getExperiments()).filter((e) => e.data.ais.includes(entry.id));
+const logs = (await getLearningLogs()).filter((l) => l.data.tools.includes(entry.id));
+const autoIds = new Set([...experiments, ...logs].map((e) => `/${e.collection}/${e.id}/`));
+const related = await resolveRelated(d.related, entry.id);
+const backlinks = (await findBacklinks('tools', entry.id)).filter((b) => !autoIds.has(b.href));
+---
+<DetailLayout
+  title={d.name}
+  description={d.summary}
+  eyebrow={`AIツール図鑑 ・ ${d.vendor}`}
+  crumbs={[{ title: 'AIツール図鑑', path: '/tools/' }]}
+  headings={headings}
+  related={related}
+  backlinks={backlinks}
+  sources={[{ type: 'official', title: `${d.name} 公式サイト`, url: d.url }, ...d.sources]}
+>
+  <div slot="before" class="tool-head" style={`--c:${d.color}`}>
+    <div class="intro">
+      <span class="icon" aria-hidden="true">{d.icon}</span>
+      <div>
+        <p class="sum">{d.summary}</p>
+        <a href={d.url} target="_blank" rel="noopener noreferrer">公式サイトを開く ↗</a>
+      </div>
+    </div>
+    <div class="facts">
+      {d.canDo.length > 0 && <section class="fact"><h2>✅ 何ができる？</h2><ul>{d.canDo.map((x) => <li>{x}</li>)}</ul></section>}
+      {(d.pricing || d.freePlan) && (
+        <section class="fact">
+          <h2>💴 料金</h2>
+          {d.pricing && <p>{d.pricing}</p>}
+          {d.freePlan && <p><strong>無料版でできること：</strong>{d.freePlan}</p>}
+          <p class="note">※料金・プランは変わることがあります。{d.checkedAt && `${formatDate(d.checkedAt)} 時点の確認。`}最新情報は公式サイトで確認してください。</p>
+        </section>
+      )}
+      {d.strengths.length > 0 && <section class="fact good"><h2>👍 得意なこと</h2><ul>{d.strengths.map((x) => <li>{x}</li>)}</ul></section>}
+      {d.weaknesses.length > 0 && <section class="fact bad"><h2>🤔 苦手なこと</h2><ul>{d.weaknesses.map((x) => <li>{x}</li>)}</ul></section>}
+      <section class="fact rating">
+        <h2>💬 Discordメンバーの評価</h2>
+        {d.rating ? (
+          <>
+            <Stars score={d.rating.score} votes={d.rating.votes} />
+            <p class="note">メンバーが実際に使った感想の平均です（公式の評価ではありません）。</p>
+          </>
+        ) : (
+          <p>まだ評価がありません。使ってみたらDiscordで感想を教えてください。</p>
+        )}
+      </section>
+    </div>
+  </div>
+
+  <Content />
+
+  <div slot="after">
+    {experiments.length > 0 && (
+      <section class="auto"><h2>🧪 このツールを使った実験</h2><div class="grid">{experiments.map((e) => <ContentCard item={toLinkItem(e)} compact />)}</div></section>
+    )}
+    {logs.length > 0 && (
+      <section class="auto"><h2>📒 このツールが登場する学習ログ</h2><div class="grid">{logs.map((l) => <ContentCard item={toLinkItem(l)} compact />)}</div></section>
+    )}
+  </div>
+</DetailLayout>
+<style>
+  .intro { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; }
+  .icon { flex: none; width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font-size: 2rem; background: color-mix(in srgb, var(--c) 15%, white); border: 2px solid color-mix(in srgb, var(--c) 35%, white); }
+  .sum { margin: 0 0 4px; }
+  .facts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); margin-bottom: 12px; }
+  .fact { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: #fbfdff; }
+  .fact h2 { margin: 0 0 6px; font-size: 0.95rem; }
+  .fact ul { margin: 0; padding-left: 1.2em; font-size: 0.9rem; }
+  .fact p { margin: 0 0 6px; font-size: 0.9rem; }
+  .good { background: #f0fdf4; border-color: #bbf7d0; }
+  .bad { background: #fff7ed; border-color: #fed7aa; }
+  .rating { background: #fffbeb; border-color: #fde68a; }
+  .note { font-size: 0.76rem !important; color: var(--muted); }
+  .auto { margin-top: 32px; }
+  .auto h2 { font-size: 1.1rem; }
+</style>

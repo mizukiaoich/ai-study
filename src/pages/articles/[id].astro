@@ -1,0 +1,36 @@
+---
+import { render } from 'astro:content';
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import MetaTable from '../../components/MetaTable.astro';
+import { getArticles, formatDate, resolveRelated, findBacklinks } from '../../lib/content';
+import { CATEGORIES } from '../../data/categories';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const cat = CATEGORIES[d.category];
+const { Content, headings } = await render(entry);
+const related = await resolveRelated(d.related, entry.id);
+const backlinks = await findBacklinks('articles', entry.id);
+---
+<DetailLayout
+  title={d.title}
+  description={d.summary}
+  eyebrow={`${cat.num} ${cat.title}`}
+  crumbs={[{ title: cat.title, path: cat.path }]}
+  headings={headings}
+  related={related}
+  backlinks={backlinks}
+  sources={d.sources}
+>
+  <MetaTable slot="before" rows={[
+    { label: '作成日', value: formatDate(d.date) },
+    { label: '更新日', value: formatDate(d.updated) },
+    { label: 'テーマ', value: d.topic },
+    { label: 'タグ', value: d.tags },
+  ]} />
+  <Content />
+</DetailLayout>

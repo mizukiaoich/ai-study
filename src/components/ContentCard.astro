@@ -1,0 +1,51 @@
+---
+// 学習ログ・実験・記事などの共通カード
+import type { LinkItem } from '../lib/content';
+import { formatDate } from '../lib/content';
+import { url } from '../lib/url';
+
+interface Props { item: LinkItem; image?: string; compact?: boolean }
+const { item, image, compact = false } = Astro.props;
+
+const THEME: Record<string, { icon: string; from: string; to: string; badge: string }> = {
+  learning: { icon: '📒', from: '#1d4ed8', to: '#22d3ee', badge: 'badge' },
+  experiments: { icon: '🧪', from: '#7c3aed', to: '#f472b6', badge: 'badge badge-pink' },
+  articles: { icon: '📖', from: '#0f766e', to: '#34d399', badge: 'badge badge-green' },
+  tools: { icon: '🧰', from: '#4338ca', to: '#818cf8', badge: 'badge badge-purple' },
+  glossary: { icon: '🔤', from: '#b45309', to: '#facc15', badge: 'badge badge-orange' },
+  news: { icon: '📰', from: '#0369a1', to: '#38bdf8', badge: 'badge badge-gray' },
+};
+const t = THEME[item.kind];
+---
+<a class:list={['card', 'content-card', { compact }]} href={url(item.href)}>
+  {!compact && (
+    <div class="thumb" style={`--from:${t.from};--to:${t.to}`}>
+      {image ? <img src={url(image)} alt="" loading="lazy" /> : <span class="thumb-icon" aria-hidden="true">{t.icon}</span>}
+      <span class={t.badge}>{item.badge}</span>
+    </div>
+  )}
+  <div class="body">
+    {compact && <span class={t.badge}>{item.badge}</span>}
+    <h3>{item.title}</h3>
+    {item.date && <time datetime={item.date.toISOString()}>{formatDate(item.date)}</time>}
+    {item.summary && <p>{item.summary}</p>}
+  </div>
+</a>
+
+<style>
+  .content-card { padding: 0; overflow: hidden; display: flex !important; flex-direction: column; }
+  .thumb {
+    position: relative; height: 128px; display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--from), var(--to));
+  }
+  .thumb::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 10%, rgba(255,255,255,.35), transparent 50%); }
+  .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .thumb-icon { font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,.2)); }
+  .thumb .badge { position: absolute; top: 10px; left: 10px; z-index: 1; background: rgba(255,255,255,.95); }
+  .body { padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+  .compact .body { padding: 16px; }
+  .compact .body .badge { align-self: flex-start; margin-bottom: 4px; }
+  h3 { margin: 0; font-size: 1rem; line-height: 1.5; }
+  time { font-size: 0.78rem; color: var(--muted); }
+  p { margin: 4px 0 0; font-size: 0.86rem; color: #475569; line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+</style>

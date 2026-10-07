@@ -1,0 +1,38 @@
+---
+import { render } from 'astro:content';
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import MetaTable from '../../components/MetaTable.astro';
+import { getLearningLogs, getTools, formatDate, resolveRelated, findBacklinks } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const logs = await getLearningLogs();
+  return logs.map((entry, i) => ({ params: { id: entry.id }, props: { entry, newer: logs[i - 1], older: logs[i + 1] } }));
+}
+const { entry, newer, older } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const tools = await getTools();
+const toolNames = d.tools.map((t) => tools.find((x) => x.id === t)?.data.name ?? t);
+const related = await resolveRelated([...d.related, ...d.tools.filter((t) => tools.some((x) => x.id === t)).map((t) => `tools/${t}`)], entry.id);
+const backlinks = await findBacklinks('learning', entry.id);
+---
+<DetailLayout
+  title={`Day ${d.day}　${d.title}`}
+  description={d.summary}
+  eyebrow={`学習ログ ・ ${d.category}`}
+  crumbs={[{ title: '学習ログ', path: '/learning/' }]}
+  headings={headings}
+  related={related}
+  backlinks={backlinks}
+  sources={d.sources}
+  prev={older && { title: `Day ${older.data.day} ${older.data.title}`, href: `/learning/${older.id}/` }}
+  next={newer && { title: `Day ${newer.data.day} ${newer.data.title}`, href: `/learning/${newer.id}/` }}
+>
+  <MetaTable slot="before" rows={[
+    { label: '学習日', value: formatDate(d.date) },
+    { label: 'カテゴリー', value: d.category },
+    { label: '参加者', value: d.participants },
+    { label: '使ったAI', value: toolNames },
+  ]} />
+  <Content />
+</DetailLayout>

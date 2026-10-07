@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getNews, getTools, formatDate } from '../../lib/content';
+import { url } from '../../lib/url';
+
+const news = await getNews();
+const tools = await getTools();
+const name = (id: string) => tools.find((t) => t.id === id)?.data.name ?? id;
+---
+<BaseLayout title="AIニュース・アップデート" description="自分たちの学習に関係するAIサービスの変更を記録しています。">
+  <PageHero title="AIニュース・アップデート" eyebrow="08 📰" description="ニュースを大量に集めるのではなく、「自分たちの学習に関係する変更」を中心に記録しています。" />
+  <section class="section container">
+    {news.length ? (
+      <ul class="news">
+        {news.map((n) => (
+          <li>
+            <a class="card" href={url(`/news/${n.id}/`)}>
+              <time datetime={n.data.date.toISOString()}>{formatDate(n.data.date)}</time>
+              <div>
+                <h2>{n.data.title}</h2>
+                {n.data.summary && <p>{n.data.summary}</p>}
+                {n.data.tools.length > 0 && <ul class="tag-list">{n.data.tools.map((t) => <li class="tag">{name(t)}</li>)}</ul>}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : <p class="empty">まだニュースがありません。</p>}
+  </section>
+</BaseLayout>
+<style>
+  .news { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .news a { display: grid !important; grid-template-columns: 1fr; gap: 4px; }
+  @media (min-width: 640px) { .news a { grid-template-columns: 110px 1fr; gap: 16px; } }
+  time { font-weight: 700; color: var(--blue); font-size: 0.9rem; }
+  h2 { margin: 0 0 4px; font-size: 1.05rem; }
+  p { margin: 0 0 6px; color: #475569; font-size: 0.9rem; }
+</style>

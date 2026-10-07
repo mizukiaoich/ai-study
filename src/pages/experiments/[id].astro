@@ -1,0 +1,47 @@
+---
+import { render } from 'astro:content';
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import MetaTable from '../../components/MetaTable.astro';
+import { getExperiments, getTools, formatDate, resolveRelated, findBacklinks } from '../../lib/content';
+import { CATEGORIES } from '../../data/categories';
+
+export async function getStaticPaths() {
+  const list = await getExperiments();
+  return list.map((entry, i) => ({ params: { id: entry.id }, props: { entry, newer: list[i - 1], older: list[i + 1] } }));
+}
+const { entry, newer, older } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const tools = await getTools();
+const aiNames = d.ais.map((a) => tools.find((t) => t.id === a)?.data.name ?? a);
+const related = await resolveRelated([...d.related, ...d.ais.filter((a) => tools.some((t) => t.id === a)).map((a) => `tools/${a}`)], entry.id);
+const backlinks = await findBacklinks('experiments', entry.id);
+const STATUS = { planned: '予定', doing: '実験中', done: '完了' };
+---
+<DetailLayout
+  title={`実験${d.id}　${d.title}`}
+  description={d.summary}
+  eyebrow={`AI実験室 ・ ${CATEGORIES[d.category].title}`}
+  crumbs={[{ title: 'AI実験室', path: '/experiments/' }]}
+  headings={headings}
+  related={related}
+  backlinks={backlinks}
+  sources={d.sources}
+  prev={older && { title: `実験${older.data.id} ${older.data.title}`, href: `/experiments/${older.id}/` }}
+  next={newer && { title: `実験${newer.data.id} ${newer.data.title}`, href: `/experiments/${newer.id}/` }}
+>
+  <div slot="before">
+    <MetaTable rows={[
+      { label: '実験日', value: formatDate(d.date) },
+      { label: '状態', value: STATUS[d.status] },
+      { label: '使用したAI', value: aiNames },
+      { label: '参加者', value: d.participants },
+    ]} />
+    {d.conclusion && <p class="conclusion"><span>🏁 ひとことで言うと</span>{d.conclusion}</p>}
+  </div>
+  <Content />
+</DetailLayout>
+<style>
+  .conclusion { margin: 0 0 24px; padding: 14px 16px; border-radius: 12px; background: linear-gradient(135deg, #fdf2f8, #f5f3ff); border: 1px solid #fbcfe8; font-weight: 500; }
+  .conclusion span { display: block; font-size: 0.78rem; color: var(--pink); font-weight: 700; }
+</style>

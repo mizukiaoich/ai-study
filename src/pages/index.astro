@@ -1,0 +1,192 @@
+---
+// トップページ。学習ログ・実験・ツールは content/ から自動で集めるので、
+// ここを手で編集しなくても最新の記事が表示されます。
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Robot from '../components/Robot.astro';
+import ContentCard from '../components/ContentCard.astro';
+import ToolCard from '../components/ToolCard.astro';
+import { getLearningLogs, getExperiments, getTools, getNews, toLinkItem } from '../lib/content';
+import { SITE_MENU, AI_CAN_DO, LEARNING_FLOW, CATEGORIES } from '../data/categories';
+import { url } from '../lib/url';
+
+const logs = (await getLearningLogs()).slice(0, 4);
+const experiments = (await getExperiments()).slice(0, 3);
+const tools = await getTools();
+const news = (await getNews()).slice(0, 3);
+
+const messages = [
+  { icon: '❓', text: '分からないことから始めよう。', color: '#db2777' },
+  { icon: '🔍', text: '調べてみよう。', color: '#2563eb' },
+  { icon: '🧪', text: '実際に試してみよう。', color: '#16a34a' },
+  { icon: '📒', text: '分かったことをみんなで残そう。', color: '#ea580c' },
+];
+---
+<BaseLayout>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Discord発・初心者のための共同学習サイト</p>
+        <h1>わからないから始める。<br /><span>みんなでつくるAI学習サイト</span></h1>
+        <p class="hero-lead">AIに詳しくない私たちが、Discordで一緒に調べて、試して、学んだことを記録しています。</p>
+        <div class="hero-buttons">
+          <a class="btn btn-primary" href={url('/know/')}>📖 AIを知る</a>
+          <a class="btn btn-ghost" href={url('/learning/')}>📒 最新の学習ログを見る</a>
+          <a class="btn btn-ghost" href={url('/experiments/')}>🧪 AI実験を見る</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <Robot size={280} class="robot" />
+        <p class="bubble">一緒に<br />学ぼう！</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container messages" aria-label="このサイトの合言葉">
+    {messages.map((m) => (
+      <div class="message" style={`--c:${m.color}`}><span aria-hidden="true">{m.icon}</span>{m.text}</div>
+    ))}
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">最新の学習ログ</h2>
+      <a class="more-link" href={url('/learning/')}>すべて見る →</a>
+    </div>
+    {logs.length ? (
+      <div class="grid">{logs.map((l) => <ContentCard item={toLinkItem(l)} image={l.data.image} />)}</div>
+    ) : <p class="empty">まだ学習ログがありません。content/learning/ に Day 1 を追加しましょう。</p>}
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">最新のAI実験</h2>
+      <a class="more-link" href={url('/experiments/')}>AI実験室へ →</a>
+    </div>
+    <p class="section-lead">「実際にAIにやらせてみた」記録です。うまくいかなかったことも残しています。</p>
+    {experiments.length ? (
+      <div class="grid">{experiments.map((e) => <ContentCard item={toLinkItem(e)} image={e.data.image} />)}</div>
+    ) : <p class="empty">まだ実験がありません。</p>}
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">AIツール図鑑</h2>
+      <a class="more-link" href={url('/tools/')}>図鑑を見る →</a>
+    </div>
+    <div class="grid">{tools.map((t) => <ToolCard tool={t} />)}</div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">AIでできること</h2>
+      <a class="more-link" href={url(CATEGORIES.use.path)}>AIを使ってみる →</a>
+    </div>
+    <div class="grid-sm">
+      {AI_CAN_DO.map((c) => (
+        <div class="card can-do"><span aria-hidden="true">{c.icon}</span><strong>{c.title}</strong><small>{c.text}</small></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head"><h2 class="section-title">学習の流れ</h2></div>
+    <p class="section-lead">サイトを直接編集するのではなく、みんなが作った「学習資料」をもとに更新しています。</p>
+    <ol class="flow">
+      {LEARNING_FLOW.map((f, i) => (
+        <li class="card"><span class="flow-num">{i + 1}</span><span class="flow-icon" aria-hidden="true">{f.icon}</span><strong>{f.title}</strong><small>{f.text}</small></li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section container">
+    <div class="section-head"><h2 class="section-title">サイトのメニュー</h2></div>
+    <div class="grid menu-grid">
+      {SITE_MENU.map((m) => (
+        <a class="card menu-card" href={url(m.path)} style={`--c:${m.color}`}>
+          <span class="menu-num">{m.num}</span>
+          <div><h3>{m.icon} {m.title}</h3><p>{m.description}</p></div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {news.length > 0 && (
+    <section class="section container">
+      <div class="section-head">
+        <h2 class="section-title">AIニュース・アップデート</h2>
+        <a class="more-link" href={url('/news/')}>すべて見る →</a>
+      </div>
+      <div class="grid">{news.map((n) => <ContentCard item={toLinkItem(n)} compact />)}</div>
+    </section>
+  )}
+
+  <section class="section container">
+    <div class="join card">
+      <h2>あなたも一緒に学びませんか？</h2>
+      <p>AIに詳しくなくても大丈夫。「これ何？」という疑問を持ち寄るところから始めています。<br />分からなかったことも、失敗したことも、ぜんぶ学習の記録です。</p>
+      <a class="btn btn-primary" href={url('/learning/day001/')}>Day 1 から読んでみる</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative; overflow: hidden; color: #fff;
+    background: radial-gradient(circle at 78% 40%, rgba(34, 211, 238, 0.28), transparent 40%),
+      radial-gradient(circle at 10% 90%, rgba(124, 58, 237, 0.25), transparent 40%),
+      linear-gradient(135deg, #081430 0%, #0b1b3f 45%, #15306b 100%);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; opacity: 0.25; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,.6) 1px, transparent 1px); background-size: 28px 28px;
+    mask-image: linear-gradient(90deg, transparent, #000 60%);
+  }
+  .hero-inner { position: relative; display: grid; gap: 12px; align-items: center; padding-top: 44px; padding-bottom: 44px; grid-template-columns: 1fr; }
+  @media (min-width: 880px) { .hero-inner { grid-template-columns: 1.4fr 1fr; padding-top: 64px; padding-bottom: 64px; } }
+  .hero-eyebrow { display: inline-block; margin: 0 0 12px; padding: 4px 12px; border-radius: 999px; background: rgba(34, 211, 238, 0.15); color: var(--cyan); font-size: 0.8rem; font-weight: 700; }
+  .hero h1 { color: #fff; margin: 0 0 16px; font-size: clamp(1.7rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: 0.02em; }
+  .hero h1 span { background: linear-gradient(90deg, #93c5fd, var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero-lead { color: #cbd5f5; margin: 0 0 24px; max-width: 34em; }
+  .hero-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+  .hero-art { position: relative; display: flex; justify-content: center; }
+  .robot { width: min(70vw, 280px); height: auto; animation: float 5s ease-in-out infinite; }
+  .bubble { position: absolute; top: 4%; right: 2%; margin: 0; font-family: var(--font-round); font-weight: 800; font-size: 1.3rem; line-height: 1.3; transform: rotate(-8deg); color: #e0f2fe; }
+  @keyframes float { 50% { transform: translateY(-8px); } }
+  @media (prefers-reduced-motion: reduce) { .robot { animation: none; } }
+  @media (max-width: 879px) { .hero-art { order: -1; } .robot { width: 150px; } .bubble { font-size: 1rem; right: 12%; } }
+
+  .messages { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); margin-top: -26px; position: relative; }
+  .message { background: #fff; border-radius: 12px; box-shadow: var(--shadow); padding: 14px 16px; font-weight: 700; font-family: var(--font-round); color: var(--navy); border-left: 5px solid var(--c); display: flex; gap: 10px; align-items: center; }
+
+  .can-do { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; padding: 18px 12px; }
+  .can-do span { font-size: 1.8rem; }
+  .can-do small { color: var(--muted); font-size: 0.78rem; }
+
+  .flow { list-style: none; padding: 0; margin: 0; display: grid; gap: 26px; grid-template-columns: 1fr; }
+  .flow li { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 18px 12px; }
+  .flow li::after { position: absolute; color: #93c5fd; font-weight: 800; font-size: 1.1rem; }
+  /* スマホ：縦に1列（↓） */
+  .flow li:not(:last-child)::after { content: '↓'; left: 50%; bottom: -26px; transform: translateX(-50%); }
+  /* タブレット：2列、PC：4列。行の途中だけ → を表示 */
+  @media (min-width: 521px) {
+    .flow { grid-template-columns: repeat(2, 1fr); }
+    .flow li::after { content: none !important; }
+    .flow li:nth-child(2n + 1):not(:last-child)::after { content: '→' !important; left: auto; bottom: auto; right: -22px; top: 50%; transform: translateY(-50%); }
+  }
+  @media (min-width: 900px) {
+    .flow { grid-template-columns: repeat(4, 1fr); }
+    .flow li:not(:nth-child(4n)):not(:last-child)::after { content: '→' !important; left: auto; bottom: auto; right: -22px; top: 50%; transform: translateY(-50%); }
+  }
+  .flow-num { position: absolute; top: 8px; left: 10px; font-size: 0.72rem; font-weight: 800; color: #93c5fd; }
+  .flow-icon { font-size: 2rem; }
+  .flow small { color: var(--muted); font-size: 0.78rem; }
+
+  .menu-card { display: flex !important; gap: 12px; align-items: flex-start; border-left: 4px solid var(--c); }
+  .menu-num { flex: none; font-family: var(--font-round); font-weight: 800; color: #fff; background: var(--c); border-radius: 8px; padding: 2px 8px; font-size: 0.85rem; }
+  .menu-card h3 { margin: 0 0 4px; font-size: 1rem; color: var(--c); }
+  .menu-card p { margin: 0; font-size: 0.84rem; color: #475569; line-height: 1.6; }
+
+  .join { text-align: center; padding: 32px 20px; background: linear-gradient(135deg, #eff6ff, #ecfeff); border-color: #bfdbfe; }
+  .join h2 { margin: 0 0 8px; }
+  .join p { color: #475569; margin: 0 0 18px; }
+</style>

@@ -1,0 +1,17 @@
+---
+import { url } from '../lib/url';
+interface Props { title: string; eyebrow?: string; description?: string; crumbs?: { title: string; path: string }[] }
+const { title, eyebrow, description, crumbs = [] } = Astro.props;
+---
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="パンくずリスト">
+      <a href={url('/')}>ホーム</a>
+      {crumbs.map((c) => <> ／ <a href={url(c.path)}>{c.title}</a></>)}
+    </nav>
+    {eyebrow && <div class="eyebrow">{eyebrow}</div>}
+    <h1>{title}</h1>
+    {description && <p>{description}</p>}
+    <slot />
+  </div>
+</section>
