@@ -21,7 +21,7 @@ export const CATEGORIES: Record<CategoryId, MenuItem> = {
   know: {
     num: '01', id: 'know', title: 'AIを知る', short: '知る', path: '/know/', icon: '📖', color: '#2563eb',
     description: 'AIってそもそも何？ からスタート。みんなで調べた基本をまとめています。',
-    topics: ['AIとは何か', '生成AIとは', 'LLMとは', 'ChatGPTとは', 'AIと検索エンジンの違い', 'AIはどうやって回答しているのか', 'AIの得意なこと', 'AIの苦手なこと', 'ハルシネーションとは', 'プロンプトとは'],
+    topics: ['AIとは何か', '生成AIとは', '生成AIの種類', 'LLMとは', 'ChatGPTとは', 'AIと検索エンジンの違い', 'AIはどうやって回答しているのか', 'AIの得意なこと', 'AIの苦手なこと', 'ハルシネーションとは', 'プロンプトとは'],
   },
   use: {
     num: '02', id: 'use', title: 'AIを使ってみる', short: '使う', path: '/use/', icon: '🖐️', color: '#16a34a',
