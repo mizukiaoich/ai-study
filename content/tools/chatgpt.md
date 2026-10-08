@@ -7,14 +7,14 @@ summary: 話しかけるように質問すると、文章で答えてくれる�
 icon: 💬
 color: "#10a37f"
 order: 1
-pricing: 無料プランと有料プランがあります。
+pricing: 無料プランのほか、有料プランは Go（月1,400円〜）・Plus（月3,000円前後）・Pro などがあります（2026年10月時点・メンバー調べ）。
 freePlan: 質問・文章作成・要約など、基本的なチャットは無料で試せます（回数や使えるモデルに制限あり）。
 canDo: [文章作成, 要約・翻訳, 画像生成, ファイルの読み込み, Web検索, プログラミングの手伝い]
 strengths: [質問の意図をくみ取って答えるのが得意, 機能が多く、いろいろなことを1か所で試せる]
 weaknesses: [もっともらしい間違いを言うことがある, 最新情報は検索機能を使わないと古いことがある]
-checkedAt: 2026-10-07
+checkedAt: 2026-10-08
 tags: [チャットAI, 文章作成]
-related: [articles/first-ai, glossary/llm]
+related: [articles/first-ai, glossary/llm, articles/ai-types-overview]
 ---
 
 :::warning[サンプル]

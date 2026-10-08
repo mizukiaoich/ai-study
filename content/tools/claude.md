@@ -7,14 +7,18 @@ summary: 長い文章を読んだり、丁寧な文章を書いたりするの�
 icon: ✳️
 color: "#d97757"
 order: 2
-pricing: 無料プランと有料プランがあります。
+pricing: Free（無料）、Pro（月20ドル・年払いなら月17ドル相当）、Max（月100ドル〜）があります（2026年10月8日に公式サイトで確認）。
 freePlan: 基本的なチャット・ファイルの読み込みなどを無料で試せます（回数に制限あり）。
 canDo: [文章作成, 長い文章の要約, ファイル・PDFの読み込み, プログラミングの手伝い]
 strengths: [長い文章を読んでまとめるのが得意, 落ち着いた丁寧な文章を書く]
 weaknesses: [画像の生成はできない（2026年10月時点で要確認）, 無料版は使える回数が少なめと感じた]
-checkedAt: 2026-10-07
+checkedAt: 2026-10-08
 tags: [チャットAI, 文章作成]
-related: [tools/claude-code]
+related: [tools/claude-code, articles/ai-types-overview]
+sources:
+  - type: official
+    title: Claude 料金ページ（2026/10/08 確認）
+    url: https://claude.com/pricing
 ---
 
 :::warning[サンプル]

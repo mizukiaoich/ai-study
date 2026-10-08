@@ -7,14 +7,14 @@ summary: Googleが提供するチャットAI。Googleのサービスと組み合
 icon: ✨
 color: "#4285f4"
 order: 3
-pricing: 無料プランと有料プランがあります。
+pricing: 無料プランのほか、Google AI Plus（月725円〜）・Google AI Pro（月2,900円前後）などの有料プランがあります（2026年10月時点・メンバー調べ）。
 freePlan: Googleアカウントがあれば、基本的なチャットを無料で試せます。
 canDo: [文章作成, 要約・翻訳, 画像生成, Web検索, Googleサービスとの連携]
 strengths: [Google検索やGoogleのサービスと組み合わせやすい]
 weaknesses: [同じ質問でも回答のばらつきを感じることがあった]
-checkedAt: 2026-10-07
+checkedAt: 2026-10-08
 tags: [チャットAI, Google]
-related: [tools/notebooklm]
+related: [tools/notebooklm, articles/ai-types-overview]
 ---
 
 :::warning[サンプル]
