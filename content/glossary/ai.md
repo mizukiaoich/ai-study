@@ -4,8 +4,9 @@ term: AI
 reading: えーあい
 english: Artificial Intelligence（人工知能）
 short: 人間が頭を使ってやること（判断・予測・会話など）を、コンピューターでできるようにする技術のこと。
+category: 基本
 tags: [基本]
-related: [glossary/generative-ai, articles/ai-basics]
+related: [glossary/generative-ai, articles/ai-basics, glossary/agi, glossary/training]
 ---
 
 ## もう少しくわしく

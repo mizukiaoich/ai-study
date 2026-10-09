@@ -2,17 +2,24 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import { getGlossary, kanaRow, KANA_ROWS } from '../../lib/content';
+import { GLOSSARY_CATEGORIES } from '../../data/categories';
 import { url } from '../../lib/url';
 
 const terms = await getGlossary();
+const cats = GLOSSARY_CATEGORIES.map((c) => ({ ...c, count: terms.filter((t) => t.data.category === c.id).length })).filter((c) => c.count);
 const groups = KANA_ROWS.map((row) => ({ row, items: terms.filter((t) => kanaRow(t.data.reading) === row) })).filter((g) => g.items.length);
 ---
 <BaseLayout title="AI用語集" description="AIの分からない言葉を、初心者向けの一言説明つきで調べられます。">
-  <PageHero title="AI用語集" eyebrow="09 🔤" description="分からない言葉を、初心者向けの「一言説明」つきでまとめています。" />
+  <PageHero title="AI用語集" eyebrow="09 🔤" description={`分からない言葉を、初心者向けの「一言説明」つきでまとめています（${terms.length}語）。初めての人は「基本」から読むのがおすすめです。`} />
   <section class="section container">
     <div class="tools-bar">
       <label class="visually-hidden" for="g-filter">用語をしぼりこむ</label>
       <input id="g-filter" type="search" placeholder="用語をしぼりこむ（例：LLM、ぷろんぷと）" autocomplete="off" />
+      <div class="cats" role="group" aria-label="カテゴリーでしぼりこむ" data-desc={JSON.stringify(Object.fromEntries(cats.map((c) => [c.id, `${c.icon} ${c.id}：${c.description}`])))}>
+        <button type="button" data-cat="" aria-pressed="true">すべて<small>{terms.length}</small></button>
+        {cats.map((c) => <button type="button" data-cat={c.id} aria-pressed="false" title={c.description}>{c.icon} {c.id}<small>{c.count}</small></button>)}
+      </div>
+      <p class="cat-desc" id="g-cat-desc" hidden></p>
       <nav class="kana" aria-label="あいうえお順">
         {KANA_ROWS.map((r) => groups.some((g) => g.row === r) ? <a href={`#row-${r}`}>{r}</a> : <span>{r}</span>)}
       </nav>
@@ -22,9 +29,9 @@ const groups = KANA_ROWS.map((row) => ({ row, items: terms.filter((t) => kanaRow
         <h2>{g.row === '英数' ? '英数字' : `${g.row}行`}</h2>
         <div class="grid">
           {g.items.map((t) => (
-            <a class="card term" href={url(`/glossary/${t.id}/`)} data-text={`${t.data.term} ${t.data.reading} ${t.data.english ?? ''} ${t.data.short} ${t.data.tags.join(' ')}`.toLowerCase()}>
+            <a class="card term" href={url(`/glossary/${t.id}/`)} data-cat={t.data.category ?? ''} data-text={`${t.data.term} ${t.data.reading} ${t.data.english ?? ''} ${t.data.short} ${t.data.tags.join(' ')}`.toLowerCase()}>
               <h3>{t.data.term}{t.data.english && <small>{t.data.english}</small>}</h3>
-              <p class="reading">{t.data.reading}</p>
+              <p class="reading">{t.data.reading}{t.data.category && <span class="badge badge-orange">{t.data.category}</span>}</p>
               <p>{t.data.short}</p>
             </a>
           ))}
@@ -39,13 +46,25 @@ const groups = KANA_ROWS.map((row) => ({ row, items: terms.filter((t) => kanaRow
   const input = document.getElementById('g-filter') as HTMLInputElement | null;
   const empty = document.getElementById('g-empty');
   const toHira = (s: string) => s.replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
-  input?.addEventListener('input', () => {
-    const q = toHira(input.value.trim().toLowerCase());
+  const catDesc = document.getElementById('g-cat-desc');
+  const descs: Record<string, string> = JSON.parse(document.querySelector('.cats')?.getAttribute('data-desc') ?? '{}');
+  let cat = '';
+  document.querySelectorAll<HTMLButtonElement>('.cats button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      cat = btn.dataset.cat ?? '';
+      document.querySelectorAll('.cats button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      if (catDesc) { catDesc.textContent = descs[cat] ?? ''; catDesc.hidden = !cat; }
+      apply();
+    });
+  });
+  input?.addEventListener('input', apply);
+  function apply() {
+    const q = toHira((input?.value ?? '').trim().toLowerCase());
     let total = 0;
     document.querySelectorAll<HTMLElement>('[data-row]').forEach((row) => {
       let n = 0;
       row.querySelectorAll<HTMLElement>('.term').forEach((card) => {
-        const hit = !q || toHira(card.dataset.text ?? '').includes(q);
+        const hit = (!q || toHira(card.dataset.text ?? '').includes(q)) && (!cat || card.dataset.cat === cat);
         card.hidden = !hit;
         if (hit) n++;
       });
@@ -53,11 +72,18 @@ const groups = KANA_ROWS.map((row) => ({ row, items: terms.filter((t) => kanaRow
       total += n;
     });
     if (empty) empty.hidden = total > 0;
-  });
+  }
 </script>
 <style>
   .tools-bar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
   input[type='search'] { width: 100%; max-width: 520px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 1rem; font-family: inherit; background: #fff; }
+  .cats { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cats button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; border: 1px solid #cbd5e1; background: #fff; font-family: inherit; font-size: 0.85rem; cursor: pointer; color: var(--text); }
+  .cats button small { font-size: 0.72rem; color: var(--muted); }
+  .cats button[aria-pressed='true'] { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .cats button[aria-pressed='true'] small { color: #cbd5e1; }
+  .cat-desc { margin: 0; font-size: 0.88rem; color: #475569; }
+  .reading .badge { margin-left: 8px; font-size: 0.68rem; padding: 3px 7px; }
   .kana { display: flex; flex-wrap: wrap; gap: 6px; }
   .kana a, .kana span { display: grid; place-items: center; min-width: 40px; height: 36px; padding: 0 8px; border-radius: 10px; font-weight: 700; font-family: var(--font-round); }
   .kana a { background: #fff; border: 1px solid #bfdbfe; }
