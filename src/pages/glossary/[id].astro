@@ -16,7 +16,7 @@ const backlinks = await findBacklinks('glossary', entry.id);
 <DetailLayout
   title={d.english ? `${d.term}（${d.english}）` : d.term}
   description={d.short}
-  eyebrow={`AI用語集 ・ ${d.reading}`}
+  eyebrow={`AI用語集 ・ ${d.category ? `${d.category} ・ ` : ''}${d.reading}`}
   crumbs={[{ title: 'AI用語集', path: '/glossary/' }]}
   headings={headings}
   related={related}

@@ -98,3 +98,15 @@ export const SOURCE_TYPES = {
   ai: { label: 'AIの回答（未検証）', icon: '🤖' },
   other: { label: '参考', icon: '🔗' },
 } as const;
+
+/** 用語集のカテゴリー。用語の frontmatter に category: 基本 のように書く */
+export const GLOSSARY_CATEGORY_IDS = ['基本', '使うとき', '精度・仕組み', '活用・応用', '発展', '社会・ルール'] as const;
+export type GlossaryCategoryId = (typeof GLOSSARY_CATEGORY_IDS)[number];
+export const GLOSSARY_CATEGORIES: { id: GlossaryCategoryId; icon: string; description: string }[] = [
+  { id: '基本', icon: '🌱', description: 'まずはここから。AIの土台になる言葉' },
+  { id: '使うとき', icon: '💬', description: 'AIを使うときによく出てくる言葉' },
+  { id: '精度・仕組み', icon: '⚙️', description: 'AIの正確さや、しくみに関する言葉' },
+  { id: '活用・応用', icon: '🚀', description: 'AIを活用するときに出てくる言葉' },
+  { id: '発展', icon: '🔭', description: 'もう一歩くわしく知りたい人向けの言葉' },
+  { id: '社会・ルール', icon: '⚖️', description: '著作権や安全など、社会との関わり' },
+];

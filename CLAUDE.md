@@ -38,7 +38,7 @@
 3. **カテゴリーを判断**: 学習ログは `content/learning/`。独立した記事にすべき内容は `content/articles/`（category: know / use / compare / work / make）、実験は `content/experiments/`、新しい用語は `content/glossary/`、ツール情報は `content/tools/`、サービスの変更は `content/news/`。
 4. **Markdown として整理**: `npm run new -- learning` で次の Day のファイルを作り（テンプレートは `templates/`）、資料の内容を各見出しに整理する。frontmatter の `day` が資料の Day 番号と合っているか確認する。
 5. **画像を配置**: 必要な画像を `public/images/learning/` などにコピーし、英小文字・ハイフンのファイル名にする（例: `day015-chatgpt-answer.png`）。
-6. **関連記事を設定**: frontmatter の `related`（例: `[learning/day014, glossary/rag]`）、`tools`（例: `[chatgpt]`）、`sources` を設定する。新しく出てきた用語は用語集に追加し、`short`（初心者向けの一言説明）を必ず書く。
+6. **関連記事を設定**: frontmatter の `related`（例: `[learning/day014, glossary/rag]`）、`tools`（例: `[chatgpt]`）、`sources` を設定する。新しく出てきた用語は用語集に追加し、`short`（初心者向けの一言説明）と `category`（基本 / 使うとき / 精度・仕組み / 活用・応用 / 発展 / 社会・ルール）を必ず書く。
 7. **トップページへの反映**: 自動。何もしなくてよい。
 8. **ナビゲーション**: 新しいカテゴリーやテーマが必要な場合だけ `src/data/categories.ts` を更新する（`topics` に追加すると「準備中」として表示される）。
 9. **ビルド確認**: `npm run build && npm run check:links` を実行し、エラー・警告（`[related] ... が見つかりません`）がないことを確認する。

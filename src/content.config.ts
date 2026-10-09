@@ -4,7 +4,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { CATEGORY_IDS } from './data/categories';
+import { CATEGORY_IDS, GLOSSARY_CATEGORY_IDS } from './data/categories';
 
 const list = z.array(z.string()).default([]);
 
@@ -114,6 +114,8 @@ const glossary = defineCollection({
     reading: z.string(),
     english: z.string().optional(),
     short: z.string(),
+    /** 用語のカテゴリー（src/data/categories.ts の GLOSSARY_CATEGORIES のどれか） */
+    category: z.enum(GLOSSARY_CATEGORY_IDS).optional(),
     date: z.coerce.date().optional(),
     tags: list,
     related: list,

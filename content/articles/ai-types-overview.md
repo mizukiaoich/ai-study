@@ -6,7 +6,7 @@ topic: 生成AIの種類
 date: 2026-10-08
 summary: 文章・対話AI、画像生成AI、動画・音声・コードのAIを、名前・主な用途・無料/有料の目安で一覧にしました（2026年10月時点のメンバー調べ）。
 tags: [生成AIの種類, 料金, 比較, 画像生成, 動画生成, 音声, プログラミング]
-related: [learning/day004, tools/chatgpt, tools/claude, tools/gemini, tools/grok, tools/copilot, tools/perplexity, glossary/api, glossary/pay-as-you-go, glossary/generative-ai]
+related: [learning/day004, learning/day005, tools/chatgpt, tools/claude, tools/gemini, tools/grok, tools/copilot, tools/perplexity, glossary/api, glossary/pay-as-you-go, glossary/generative-ai]
 sources:
   - type: discord
     title: Day 4 でメンバーが作成した「主な生成AIまとめ」の表
@@ -97,6 +97,23 @@ Web記事を調べたところ、**DALL·E 3 の API は2026年5月に提供が�
 - **Claude Code** は、Claude の Pro プラン（月20ドル）以上に含まれています（公式サイトで確認）。このサイトの更新にも使っています。
 - 表にはありませんが、**音楽を作るAI**（例：Suno）や、**自分の資料をもとに答えてくれるAI**（例：[NotebookLM](/tools/notebooklm/)）もあります。
 
+## その他のサービス（Day 5 で追加）
+
+[Day 5](/learning/day005/) で、上の表にのっていなかったサービスも調べました。
+
+| 種類 | 主なサービス | ひとこと（サイト更新時に追記） |
+| --- | --- | --- |
+| 文章 | DeepSeek、Mistral、Llama（Meta）など | 中身（モデル）が公開されているものが多く、[ローカルLLM](/glossary/local-llm/) としても使われる（[オープンソース](/glossary/open-source/)） |
+| 音楽 | Suno、Udio など | 歌詞やイメージを伝えると、歌や曲を作ってくれる |
+| 画像・デザイン | Canva のAI機能、Leonardo.Ai など | デザインツールの中で、画像生成や文字入れができる |
+| 議事録・文字起こし | Notta、Otter.ai など | 会議の音声を文字にして、要約までしてくれる |
+
+:::warning
+- 音楽や画像のAIで作ったものを仕事やSNSで使うときは、サービスごとの **利用規約（商用利用できるか）** を確認しましょう（[著作権・学習データ問題](/glossary/copyright-training-data/)）。
+- 議事録AIに会議の音声を読ませるときは、**参加者の同意** や、社外秘の情報を入れていいかに注意が必要です。
+- 中国の会社が提供している DeepSeek など、サービスによって **データの保存場所や扱い** がちがいます。個人情報や仕事の情報を入れる前に、プライバシーポリシーを確認しましょう。
+:::
+
 ## 目安：どう始めればいい？
 
 :::member
@@ -111,6 +128,6 @@ Web記事を調べたところ、**DALL·E 3 の API は2026年5月に提供が�
 
 :::question
 - 無料版と有料版で、実際にどれくらい差があるのか（まだ誰も比べていない）
-- 画像生成AIで作った画像は、どこまで自由に使っていいのか（著作権・商用利用）
+- 画像生成AIで作った画像は、どこまで自由に使っていいのか（著作権・商用利用） → [著作権・学習データ問題](/glossary/copyright-training-data/) に少しまとめた
 - DALL·E の終了と、後継モデルについての公式の情報
 :::
