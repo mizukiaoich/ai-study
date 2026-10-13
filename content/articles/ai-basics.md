@@ -6,7 +6,7 @@ topic: AIとは何か
 date: 2026-10-05
 summary: AI・生成AI・LLMの違いを、Day 1 の学習内容をもとに初心者向けにまとめました。
 tags: [AIの基本, 生成AI, LLM]
-related: [learning/day001, glossary/ai, glossary/generative-ai, glossary/llm, glossary/hallucination]
+related: [articles/generative-ai, learning/day001, glossary/ai, glossary/generative-ai, glossary/llm, glossary/hallucination]
 sources:
   - type: discord
     title: Day 1 の学習ログ
@@ -27,7 +27,7 @@ AI（人工知能）は、**人間が頭を使ってやっていること（判�
 ## 生成AIとは？
 
 生成AIは、AIの中でも **文章・画像・音声・動画などを新しく作り出す** ものです。
-ChatGPT・Claude・Gemini は、文章を作る生成AIの代表例です。
+ChatGPT・Claude・Gemini は、文章を作る生成AIの代表例です。くわしくは [生成AIとは？](/articles/generative-ai/) を見てください。
 
 :::point
 「AI」の中に「生成AI」がある、というイメージです。
