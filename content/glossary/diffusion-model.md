@@ -7,7 +7,7 @@ short: "画像生成AIで使われる代表的なしくみ。ノイズから少�
 category: 精度・仕組み
 date: 2026-10-08
 tags: []
-related: [articles/ai-types-overview, glossary/generative-ai, glossary/transformer, learning/day005]
+related: [glossary/gan, articles/ai-types-overview, glossary/generative-ai, glossary/transformer, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）

@@ -6,7 +6,7 @@ english: Hallucination
 short: AIが、事実ではないことを、もっともらしく答えてしまうこと。
 category: 精度・仕組み
 tags: [注意点]
-related: [glossary/generative-ai, learning/day002, glossary/rag, tools/perplexity, learning/day005]
+related: [glossary/knowledge-cutoff, glossary/generative-ai, learning/day002, glossary/rag, tools/perplexity, learning/day005]
 ---
 
 ## もう少しくわしく
