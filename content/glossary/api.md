@@ -7,7 +7,7 @@ short: プログラムからAIなどのサービスを呼び出して使うた�
 category: 活用・応用
 date: 2026-10-08
 tags: [使い方, 料金]
-related: [glossary/pay-as-you-go, articles/ai-types-overview, glossary/token, glossary/temperature, learning/day005]
+related: [glossary/api-key, glossary/pay-as-you-go, articles/ai-types-overview, glossary/token, glossary/temperature, learning/day005]
 ---
 
 ## もう少しくわしく

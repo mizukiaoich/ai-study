@@ -27,5 +27,5 @@ sources:
 ## 調べて分かったこと
 
 :::point[名前がまぎらわしい]
-プログラミング用の **GitHub Copilot** とは別のサービスです。
+プログラミング用の [GitHub Copilot](/tools/github-copilot/) とは別のサービスです。
 :::
