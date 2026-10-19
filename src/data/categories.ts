@@ -41,7 +41,7 @@ export const CATEGORIES: Record<CategoryId, MenuItem> = {
   make: {
     num: '05', id: 'make', title: 'AIで作ってみる', short: '作る', path: '/make/', icon: '🛠️', color: '#0891b2',
     description: 'AIと一緒に何かを作ってみた記録。うまくいかなかった話も大歓迎。',
-    topics: ['Webサイト', 'Webアプリ', 'スマホアプリ', 'プログラム', '画像', '動画', 'AIエージェント'],
+    topics: ['アプリ開発の流れ', 'Webサイト', 'Webアプリ', 'スマホアプリ', 'プログラム', '画像', '動画', 'AIエージェント'],
   },
 };
 

@@ -7,7 +7,7 @@ short: "AIが外部のツールやデータにつながるための共通ルー�
 category: 発展
 date: 2026-10-08
 tags: []
-related: [glossary/ai-agent, tools/claude, tools/claude-code, learning/day005]
+related: [articles/ai-app-dev-flow, glossary/ai-agent, tools/claude, tools/claude-code, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）

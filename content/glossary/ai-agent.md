@@ -7,7 +7,7 @@ short: "目標を伝えると、自分で手順を考えて、道具を使いな
 category: 活用・応用
 date: 2026-10-08
 tags: []
-related: [tools/claude-code, glossary/mcp, glossary/chatbot, learning/day005]
+related: [articles/ai-app-dev-flow, glossary/rules-file, tools/claude-code, glossary/mcp, glossary/chatbot, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）

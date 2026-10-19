@@ -13,7 +13,7 @@ strengths: [たくさんのファイルをまとめて読んで作業できる]
 weaknesses: [プログラミングの知識が少しあると使いやすい]
 checkedAt: 2026-10-08
 tags: [プログラミング, 自動化]
-related: [tools/claude, news/2026-10-site-open, articles/ai-types-overview]
+related: [articles/ai-app-dev-flow, glossary/rules-file, tools/claude, news/2026-10-site-open, articles/ai-types-overview]
 sources:
   - type: official
     title: Claude 料金ページ（2026/10/08 確認）
