@@ -7,7 +7,7 @@ short: "人間が回答を評価し、その評価をもとにAIの答え方を�
 category: 精度・仕組み
 date: 2026-10-08
 tags: []
-related: [glossary/fine-tuning, glossary/guardrail, learning/day005]
+related: [glossary/pre-training, glossary/instruction-tuning, articles/llm, glossary/fine-tuning, glossary/guardrail, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）

@@ -6,7 +6,7 @@ english: Large Language Model（大規模言語モデル）
 short: 大量の文章を学習して、人間のように自然な文章を作れるようになったAIのモデル。ChatGPT や Claude の土台。
 category: 基本
 tags: [基本, 仕組み]
-related: [glossary/generative-ai, glossary/prompt, glossary/transformer, glossary/token, glossary/parameter, glossary/local-llm, learning/day005]
+related: [articles/llm, learning/day008, glossary/attention, glossary/pre-training, glossary/generative-ai, glossary/prompt, glossary/transformer, glossary/token, glossary/parameter, glossary/local-llm, learning/day005]
 sources:
   - type: discord
     title: Day 1 の話し合い
@@ -27,3 +27,7 @@ ChatGPT・Claude・Gemini などのチャットAIの「頭脳」にあたる部�
 :::question
 「予測しているだけなのに、なぜ会話が成り立つのか？」はまだメンバーの中でも分かっていません。
 :::
+
+## もっとくわしく
+
+文章を作るまでの流れ・学習の段階・モデルの種類・限界は、記事 [LLMとは？](/articles/llm/) にまとめています。

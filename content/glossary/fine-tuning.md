@@ -7,7 +7,7 @@ short: "すでにあるモデルに追加で学習させて、特定の用途に
 category: 精度・仕組み
 date: 2026-10-08
 tags: []
-related: [glossary/training, glossary/rag, glossary/rlhf, learning/day005]
+related: [glossary/instruction-tuning, glossary/training, glossary/rag, glossary/rlhf, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）

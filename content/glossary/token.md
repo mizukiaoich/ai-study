@@ -7,7 +7,7 @@ short: "AIが文章を処理するときの最小単位。料金や、一度に�
 category: 使うとき
 date: 2026-10-08
 tags: []
-related: [glossary/context-window, glossary/pay-as-you-go, glossary/api, learning/day005]
+related: [articles/llm, glossary/context-window, glossary/pay-as-you-go, glossary/api, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）
