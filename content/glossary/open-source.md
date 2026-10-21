@@ -7,7 +7,7 @@ short: "誰でも使ったり作りかえたりできる形で公開されたも
 category: 活用・応用
 date: 2026-10-08
 tags: []
-related: [glossary/local-llm, glossary/fine-tuning, articles/ai-types-overview, learning/day005]
+related: [articles/llm, glossary/local-llm, glossary/fine-tuning, articles/ai-types-overview, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）
@@ -16,6 +16,7 @@ sources:
 
 ChatGPT や Claude のモデルは、中身（[パラメータ](/glossary/parameter/)）が公開されていません。
 一方、Meta の Llama や、DeepSeek、Mistral などは、モデルの中身がダウンロードできる形で公開されています。
+中身を公開せず、会社のサービス経由でだけ使えるモデルは「クローズドなモデル」と呼ばれます（[LLMとは？](/articles/llm/)）。
 
 ## できること
 

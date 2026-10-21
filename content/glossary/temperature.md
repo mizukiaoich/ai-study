@@ -7,7 +7,7 @@ short: "答えのランダムさ（ばらつき）を決める設定。高いほ
 category: 発展
 date: 2026-10-08
 tags: []
-related: [glossary/api, learning/day001, learning/day005]
+related: [articles/llm, glossary/api, learning/day001, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）

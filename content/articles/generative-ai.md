@@ -6,7 +6,7 @@ topic: 生成AIとは
 date: 2026-10-13
 summary: 生成AIの定義、従来のAIとのちがい、しくみ、歴史、できること、弱点とリスク、付き合い方のコツを、Day 6 の学習内容をもとにまとめました。
 tags: [生成AI, AIの基本, しくみ, 歴史, リスク]
-related: [learning/day006, learning/day002, articles/ai-basics, articles/ai-types-overview, glossary/generative-ai, glossary/llm, glossary/transformer, glossary/diffusion-model, glossary/gan, glossary/hallucination, glossary/bias, glossary/knowledge-cutoff]
+related: [learning/day006, articles/llm, learning/day008, learning/day002, articles/ai-basics, articles/ai-types-overview, glossary/generative-ai, glossary/llm, glossary/transformer, glossary/diffusion-model, glossary/gan, glossary/hallucination, glossary/bias, glossary/knowledge-cutoff]
 sources:
   - type: discord
     title: Day 6 でメンバーが作った「生成AIとは（詳しいまとめ）」
@@ -55,7 +55,7 @@ sources:
 1. 大量の文章を読み込み、「この言葉の次に来やすい言葉」のパターンを覚える（[学習](/glossary/training/)）
 2. 指示を受けると、ふさわしい続きの言葉を **1つずつ選んでつなげる**（[推論](/glossary/inference/)）
 
-この処理の土台になっているのが、2017年に発表された [Transformer](/glossary/transformer/) という技術です。
+この処理の土台になっているのが、2017年に発表された [Transformer](/glossary/transformer/) という技術です（くわしくは [LLMとは？](/articles/llm/)）。
 文章は [トークン](/glossary/token/) という小さな単位に区切って処理されます。
 
 :::point[補足：なぜ毎回ちがう答えになるの？]
