@@ -7,7 +7,7 @@ short: "AIが有害な答えを出さないようにするための安全対策�
 category: 活用・応用
 date: 2026-10-08
 tags: []
-related: [glossary/rlhf, glossary/system-prompt, glossary/deepfake, learning/day005]
+related: [glossary/prompt-injection, glossary/rlhf, glossary/system-prompt, glossary/deepfake, learning/day005]
 sources:
   - type: discord
     title: Day 5 でメンバーが作った用語集（materials/day005/）
