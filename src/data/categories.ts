@@ -31,7 +31,7 @@ export const CATEGORIES: Record<CategoryId, MenuItem> = {
   compare: {
     num: '03', id: 'compare', title: 'AIを比較する', short: '比較', path: '/compare/', icon: '⚖️', color: '#ea580c',
     description: '同じ課題を複数のAIにやらせて、実際の結果で比べます。公式情報だけで優劣は決めません。',
-    topics: ['ChatGPT vs Claude', 'Claude vs Gemini', 'ChatGPT vs Gemini', '画像生成AI比較', '無料AI比較', '用途別おすすめAI'],
+    topics: ['AIエージェント比較', 'ChatGPT vs Claude', 'Claude vs Gemini', 'ChatGPT vs Gemini', '画像生成AI比較', '無料AI比較', '用途別おすすめAI'],
   },
   work: {
     num: '04', id: 'work', title: 'AIを仕事で使う', short: '仕事', path: '/work/', icon: '💼', color: '#7c3aed',
